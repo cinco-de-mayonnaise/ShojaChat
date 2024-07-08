@@ -19,7 +19,22 @@ public class HelloApplication extends Application
         stage.show();
     }
 
+    private void cmdShowUsage()
+    {
+        System.out.println("Usage: shojachat <args>");
+        System.out.println("\t--server = Launch a server instance of ShojaChat. Server files will be created/used in the current working directory.");
+    }
+
     public static void main(String[] args) {
-        launch();
+        // The program is simple enough that we don't need an argparser.... yet...
+        // But just in case you do, lookup "Apache Commons CLI" or "JCommander"
+        boolean server_mode = false;
+        if (args.length == 0)
+            server_mode = false;
+
+        for (String s: args)
+            System.out.println(s);
+
+        //launch();
     }
 }
