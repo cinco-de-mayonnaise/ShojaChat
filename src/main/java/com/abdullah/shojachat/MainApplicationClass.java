@@ -1,20 +1,34 @@
 package com.abdullah.shojachat;
 
+import com.abdullah.shojachat.util.CommonInstancesClass;
+import com.sun.tools.javac.Main;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static java.lang.Integer.MAX_VALUE;
+
 
 public class MainApplicationClass extends Application
 {
+    private static final Logger logger = Logger.getLogger(MainApplicationClass.class.getName());
+    public static FileHandler logFile;
+
     @Override
     public void start(Stage stage) throws IOException
     {
@@ -31,14 +45,34 @@ public class MainApplicationClass extends Application
         System.out.println("\t--server = Launch a server instance of ShojaChat. Server files will be created/used in the current working directory.");
     }
 
-    private File createLogFile()
+    private static void createLogFile()
     {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        String dateNow = sdf.format(new Date());
-        System.out.println(dateNow);
-        File logFile = new File("/logs/" + dateNow + ".log");
-        //if (logFile.exists())
-        return logFile;
+        String dateNow = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        // System.out.println(dateNow);   // ex: "21-02-2008"
+        /*    // check for unique file
+        String unique_count = "";
+        Path logFilename = null;
+        for (int i = 1; i < Integer.MAX_VALUE; i++)
+        {
+            logFilename = logFolder.resolve(dateNow + unique_count + ".log");                   // ("logs/" + dateNow + ".log");
+            if (Files.exists(logFilename))
+                unique_count = "_" + Integer.toString(i);
+            else
+                break;
+        }
+        */
+
+        Path logFolder = Paths.get("").resolve("logs");    // get current working directory and store it
+        try
+        {
+            logFile = new FileHandler(logFolder.toAbsolutePath().toString() + dateNow + "_%u.%g.txt", 10*1024*1024, Integer.MAX_VALUE);
+            logger.addHandler(logFile);
+            logger.severe("sdf");
+        }
+        catch (IOException e)
+        {
+            logger.log(Level.WARNING, "Could not initialize log file!", e);
+        }
 
         /* TODO: LEFT OFF HERE @last
 
@@ -53,13 +87,28 @@ public class MainApplicationClass extends Application
             we'll worry about other things later.
         *
         */
+        logger.info("Log file at " + logFolder.toAbsolutePath().toString() + dateNow + ".txt");
+    }
+
+    private static void cleanupAndExit()
+    {
+        logger.info("Closing log files");
+
+        logFile.close();
+        Platform.exit();
     }
 
     public static void main(String[] args)
     {
         // Init logger
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        try
+        {
 
+        }
+        catch (IOException e)
+        {
+            logger.log();
+        }
         //Handler fh = new FileHandler("/logs/");
 
         // The program is simple enough that we don't need an argparser.... yet...

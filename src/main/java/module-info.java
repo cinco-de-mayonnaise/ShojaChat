@@ -3,6 +3,7 @@ module com.abdullah.shojachat {
     requires javafx.fxml;
     requires org.apache.commons.validator;
     requires java.logging;
+    requires jdk.compiler;
 
 
     opens com.abdullah.shojachat to javafx.fxml;

@@ -7,7 +7,7 @@ public abstract class Identifiers
     public static final int VERSION_MINOR = 1;
 
     /////// CIC Identifiers
-
+    public static final String CIC_CwdPath = "takano-chan";
 
     /////// Java Constructor Arguments
     public static final String PASSWORD_HASHING_ALGORITHM = "PBKDF2WithHmacSHA256";
