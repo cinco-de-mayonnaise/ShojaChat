@@ -19,14 +19,15 @@ import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static java.lang.Integer.MAX_VALUE;
 
 
 public class MainApplicationClass extends Application
 {
-    private static final Logger logger = Logger.getLogger(MainApplicationClass.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(MainApplicationClass.class.getName());
     public static FileHandler logFile;
 
     @Override
@@ -101,15 +102,7 @@ public class MainApplicationClass extends Application
     public static void main(String[] args)
     {
         // Init logger
-        try
-        {
-
-        }
-        catch (IOException e)
-        {
-            logger.log();
-        }
-        //Handler fh = new FileHandler("/logs/");
+        createLogFile();
 
         // The program is simple enough that we don't need an argparser.... yet...
         // But just in case you do, lookup "Apache Commons CLI" or "JCommander"
@@ -119,9 +112,8 @@ public class MainApplicationClass extends Application
         else if (args[0].equals("--server"))
             server_mode = true;
 
-
-
-        System.out.println("# args: " + Integer.toString(args.length));
+        if (server_mode)
+            logger.info("Server mode is enabled! Running as server...");
 
         for (String s: args)
             System.out.println(s);

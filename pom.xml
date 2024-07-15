@@ -38,11 +38,17 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-validator/commons-validator -->
+        <!-- https://mvnrepository.com/artifact/commons-validator/commons-validator    Arrgh I just need this to check email   -->
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
             <version>1.9.0</version>
+        </dependency>
+        <!-- logging abstraction, makes life easier and allows us to use other logging frameworks -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.13</version>
         </dependency>
     </dependencies>
 

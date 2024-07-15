@@ -4,6 +4,7 @@ module com.abdullah.shojachat {
     requires org.apache.commons.validator;
     requires java.logging;
     requires jdk.compiler;
+    requires org.slf4j;
 
 
     opens com.abdullah.shojachat to javafx.fxml;
