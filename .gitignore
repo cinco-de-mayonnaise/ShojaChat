@@ -152,3 +152,4 @@ build/
 .DS_Store
 /.idea
 .idea/misc.xml
+/logs

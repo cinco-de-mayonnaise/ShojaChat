@@ -1,6 +1,7 @@
 package com.abdullah.shojachat;
 
 import com.abdullah.shojachat.util.CommonInstancesClass;
+import com.abdullah.shojachat.util.SceneSwitcher;
 import com.sun.tools.javac.Main;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -15,12 +16,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.crypto.spec.SecretKeySpec;
 
 import static java.lang.Integer.MAX_VALUE;
 
@@ -28,16 +29,31 @@ import static java.lang.Integer.MAX_VALUE;
 public class MainApplicationClass extends Application
 {
     private static final Logger logger = LoggerFactory.getLogger(MainApplicationClass.class.getName());
-    public static FileHandler logFile;
+    static boolean server_mode = false;
 
     @Override
     public void start(Stage stage) throws IOException
     {
+        SceneSwitcher.global_class_handle = MainApplicationClass.class;
+        SceneSwitcher.mainstage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplicationClass.class.getResource("mainWindow.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
+
+        //for (java.security.Provider prov: java.security.Security.getProviders())
+        //    System.out.println(prov.toString());
+
+        // goal: try to hash "hello" using PBKDF2WITHHMACSHA384
+
+        for (String alg: java.security.Security.getAlgorithms("KeyGenerator"))
+            System.out.println(alg);
+
+        System.out.println("\n\n\n");
+
+        System.out.println(Arrays.toString(new SecretKeySpec("hello".getBytes(), "PBKDF2WITHHMACSHA384").getEncoded()));
+
     }
 
     private void cmdShowUsage()
@@ -46,67 +62,18 @@ public class MainApplicationClass extends Application
         System.out.println("\t--server = Launch a server instance of ShojaChat. Server files will be created/used in the current working directory.");
     }
 
-    private static void createLogFile()
-    {
-        String dateNow = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-        // System.out.println(dateNow);   // ex: "21-02-2008"
-        /*    // check for unique file
-        String unique_count = "";
-        Path logFilename = null;
-        for (int i = 1; i < Integer.MAX_VALUE; i++)
-        {
-            logFilename = logFolder.resolve(dateNow + unique_count + ".log");                   // ("logs/" + dateNow + ".log");
-            if (Files.exists(logFilename))
-                unique_count = "_" + Integer.toString(i);
-            else
-                break;
-        }
-        */
-
-        Path logFolder = Paths.get("").resolve("logs");    // get current working directory and store it
-        try
-        {
-            logFile = new FileHandler(logFolder.toAbsolutePath().toString() + dateNow + "_%u.%g.txt", 10*1024*1024, Integer.MAX_VALUE);
-            logger.addHandler(logFile);
-            logger.severe("sdf");
-        }
-        catch (IOException e)
-        {
-            logger.log(Level.WARNING, "Could not initialize log file!", e);
-        }
-
-        /* TODO: LEFT OFF HERE @last
-
-            trying to make a log file to write everything into
-            things that should be in the log file include what algorithm is being used to hash passwords and network packets
-            etc.
-
-            eventually we wanna log every freaking thing btw
-
-
-            After logging is done, implement the algorithm for hashing passwords, check that it works
-            we'll worry about other things later.
-        *
-        */
-        logger.info("Log file at " + logFolder.toAbsolutePath().toString() + dateNow + ".txt");
-    }
-
-    private static void cleanupAndExit()
-    {
-        logger.info("Closing log files");
-
-        logFile.close();
-        Platform.exit();
-    }
-
     public static void main(String[] args)
     {
-        // Init logger
-        createLogFile();
-
+        logger.info("<-- Application started at");
+        /*
+        logger.info("Example log from {}", MainApplicationClass.class.getSimpleName());
+        logger.debug("Example log from {}", MainApplicationClass.class.getSimpleName());
+        logger.error("Example log from {}", MainApplicationClass.class.getSimpleName());
+        logger.trace("Example log from {}", MainApplicationClass.class.getSimpleName());
+        logger.warn("Example log from {}", MainApplicationClass.class.getSimpleName());
         // The program is simple enough that we don't need an argparser.... yet...
         // But just in case you do, lookup "Apache Commons CLI" or "JCommander"
-        boolean server_mode = false;
+        */
         if (args.length == 0)
             server_mode = false;
         else if (args[0].equals("--server"))
@@ -114,10 +81,13 @@ public class MainApplicationClass extends Application
 
         if (server_mode)
             logger.info("Server mode is enabled! Running as server...");
+        else
+            logger.info("Running as client...");
 
-        for (String s: args)
-            System.out.println(s);
+        logger.trace("Arguments passed: {}", String.join(" ", args));
 
+        logger.trace("Starting the JavaFX subsystem...");
         launch();
+        logger.trace("JavaFX subsystem terminated");
     }
 }

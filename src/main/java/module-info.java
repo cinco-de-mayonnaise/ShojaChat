@@ -2,9 +2,9 @@ module com.abdullah.shojachat {
     requires javafx.controls;
     requires javafx.fxml;
     requires org.apache.commons.validator;
-    requires java.logging;
     requires jdk.compiler;
     requires org.slf4j;
+    requires ch.qos.logback.core;
 
 
     opens com.abdullah.shojachat to javafx.fxml;

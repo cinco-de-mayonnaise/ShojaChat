@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="55.0" prefWidth="187.0" spacing="4.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <StackPane alignment="BOTTOM_RIGHT" prefHeight="2.0" prefWidth="41.0" HBox.hgrow="NEVER">
+         <children>
+            <ImageView fx:id="IV_ServerIcon" fitHeight="41.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
+               <image>
+                  <Image url="@../../Red%20Folder-2.png" />
+               </image>
+            </ImageView>
+            <Circle fx:id="Circ_ServerStatus" fill="DODGERBLUE" radius="6.0" stroke="BLACK" strokeType="INSIDE" />
+         </children>
+      </StackPane>
+      <VBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="71.0" spacing="2.0" HBox.hgrow="ALWAYS">
+         <children>
+            <Label text="ServerName">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <StackPane alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <Label text="ServerStatus" />
+               </children>
+            </StackPane>
+         </children>
+         <padding>
+            <Insets left="3.0" right="3.0" />
+         </padding>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="5.0" left="8.0" right="8.0" top="5.0" />
+   </padding>
+</HBox>

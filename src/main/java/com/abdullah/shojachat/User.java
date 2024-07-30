@@ -7,7 +7,6 @@ import java.util.Date;
 import com.abdullah.shojachat.util.Identifiers;
 import org.apache.commons.validator.routines.EmailValidator;  // check email addresses
 import java.security.SecureRandom; // salting passwords
-import java.util.logging.Logger;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;   // PKBDF hashing
 
@@ -19,6 +18,7 @@ import javax.crypto.SecretKeyFactory;   // PKBDF hashing
 public class User implements Serializable
 {
     final protected String username;
+    protected String nickname;
     final protected String Email;
     protected boolean verified;
     protected String pw_Hash;
@@ -38,22 +38,7 @@ public class User implements Serializable
             return true;
     }
 
-    private Object hashPassword(String rawPassword) throws NoSuchAlgorithmException {
-        SecretKeyFactory s = null;
-        try {
-            s = SecretKeyFactory.getInstance(Identifiers.PASSWORD_HASHING_ALGORITHM);
-        }
-        catch (NoSuchAlgorithmException e) {
-            try {
-                s = SecretKeyFactory.getInstance(Identifiers.PASSWORD_HASHING_ALGORITHM_2);
-            } catch (NoSuchAlgorithmException ex) {
-                s = SecretKeyFactory.getInstance(Identifiers.PASSWORD_HASHING_ALGORITHM_fallback);
-            }
-        }
 
-        //return s.generateSecret().getFormat();
-         return null;
-    }
 
     public String getUsername() {
         return username;
@@ -73,7 +58,7 @@ public class User implements Serializable
         else
             throw new IllegalArgumentException("Email is invalid or already taken!");
 
-        this.pw_Hash = Password;
+        this.pw_Hash = Password;     // hashing very hard, store plaintext pw for now...
         this.DOJ = DOJ;
     }
 

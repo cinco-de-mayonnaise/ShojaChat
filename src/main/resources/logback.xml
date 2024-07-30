@@ -1,0 +1,30 @@
+<!--
+Logback Configuration: Determines how the logging will be output!
+-->
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d %highlight([%thread]) %highlight(\(%level\))  %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--
+        What I actually wanted was the logging format of minecraft, where you spawn a new log file every time you run the application,
+
+    -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${user.dir}/logs/%d{dd-MM-yyyy}.log</FileNamePattern>
+            <!-- <MaxHistory>30</MaxHistory> -->
+        </rollingPolicy>
+        <append>true</append>
+        <encoder>
+            <pattern>%d [%thread] %-5level  %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>6
+
+    <root level="TRACE">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

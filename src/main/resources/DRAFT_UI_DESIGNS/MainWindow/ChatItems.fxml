@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+
+<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="11.0" prefWidth="187.0" spacing="1.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <StackPane alignment="BOTTOM_RIGHT" prefHeight="0.0" prefWidth="0.0" HBox.hgrow="NEVER" />
+      <Circle fill="DODGERBLUE" radius="3.0" stroke="BLACK" strokeType="INSIDE" />
+      <Hyperlink text="SomeUser">
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
+      </Hyperlink>
+   </children>
+   <padding>
+      <Insets left="1.0" right="4.0" top="1.0" />
+   </padding>
+</HBox>
