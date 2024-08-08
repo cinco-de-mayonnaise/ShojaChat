@@ -2,9 +2,7 @@ package com.abdullah.shojachat;
 
 import com.abdullah.shojachat.util.CommonInstancesClass;
 import com.abdullah.shojachat.util.SceneSwitcher;
-import com.sun.tools.javac.Main;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -23,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.crypto.spec.SecretKeySpec;
 
-import static java.lang.Integer.MAX_VALUE;
 
 
 public class MainApplicationClass extends Application
@@ -71,6 +68,7 @@ public class MainApplicationClass extends Application
         logger.error("Example log from {}", MainApplicationClass.class.getSimpleName());
         logger.trace("Example log from {}", MainApplicationClass.class.getSimpleName());
         logger.warn("Example log from {}", MainApplicationClass.class.getSimpleName());
+
         // The program is simple enough that we don't need an argparser.... yet...
         // But just in case you do, lookup "Apache Commons CLI" or "JCommander"
         */

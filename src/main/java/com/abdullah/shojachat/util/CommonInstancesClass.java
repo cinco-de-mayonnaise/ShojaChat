@@ -54,9 +54,9 @@ public class CommonInstancesClass
         return RuntimeObjects.get(identifier);
     }
 
-    public static void putObject(String identifier, Object obj)
+    public static Object putObject(String identifier, Object obj)
     {
-        RuntimeObjects.put(identifier, obj);
+        return RuntimeObjects.put(identifier, obj);
     }
 
     public static Object deleteObject(String identifier)

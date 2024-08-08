@@ -1,14 +1,10 @@
-package com.abdullah.shojachat;
+package com.abdullah.shojachat.actors;
 
 import java.io.Serializable;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
-import com.abdullah.shojachat.util.Identifiers;
 import org.apache.commons.validator.routines.EmailValidator;  // check email addresses
-import java.security.SecureRandom; // salting passwords
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;   // PKBDF hashing
+
 
 /**
  *
