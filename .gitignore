@@ -153,3 +153,4 @@ build/
 /.idea
 .idea/misc.xml
 /logs
+serverSettings.dat

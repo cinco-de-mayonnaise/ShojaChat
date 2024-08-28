@@ -2,6 +2,7 @@ package com.abdullah.shojachat.actors;
 
 import com.abdullah.shojachat.logic.ServerStatistics;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.Set;
@@ -13,6 +14,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ServerImplData implements Serializable
 {
+    // Class Identifier: In
+    @Serial
+    private static final long serialVersionUID = 354213846432L;
+    private final String Version = "1.0";
+
     //// Server identifiers
     private String name;                                 // Every server needs a name, this is the public facing name visible to everyone.
     private final UUID id;           // unique identifier to identify servers.

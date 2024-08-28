@@ -1,4 +1,4 @@
-package com.abdullah.shojachat.logic;
+package com.abdullah.shojachat.logic.events;
 
 /**
  * Event that is called when the network thread has successfully received and decoded a message.
@@ -7,7 +7,6 @@ package com.abdullah.shojachat.logic;
  */
 public class RecieveMessage_Event extends AppEvent
 {
-
     /**
      * Constructs a Logic Event.
      *

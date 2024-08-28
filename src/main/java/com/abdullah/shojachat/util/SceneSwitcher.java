@@ -1,19 +1,20 @@
 package com.abdullah.shojachat.util;
 
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  *
@@ -34,63 +35,117 @@ final public class SceneSwitcher
      */
     public static void switchToScene(Stage stage, String fxml_url)
     {
-        try
-        {
-            Parent root = getRootNodeFromURL(fxml_url);
+        Runnable work = () -> {
+            try
+            {
+                Parent root = getRootNodeFromURL(fxml_url);
 
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        }
-        catch (Throwable t)
-        {
-            logger.warn("SceneSwitcher failed to switch window {} to scene {}", stage.getTitle(), fxml_url);
-            logger.warn("Cause: {}", t.getMessage());
-        }
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+            catch (Throwable t)
+            {
+                logger.warn("SceneSwitcher failed to switch window {} to scene {}", stage.getTitle(), fxml_url);
+                logger.warn("Cause: {}", t.getMessage());
+            }
+
+            logger.trace("Switched stage {} to scene \"{}\"", stage.getTitle(), fxml_url);
+        };
+
+        if (Platform.isFxApplicationThread())
+            work.run();
+        else
+            Platform.runLater(work);
     }
 
     /**
      * Creates a new window with the scene(pointed to by <code>fxml_url</code>). No other properties are set.
      * Typically, you should call this function from a controller to navigate to another part of the program.
      * Keep in mind you should store the return value of this function somewhere if you want to be able to
-     * remove/modify the window in the future.
+     * remove/modify the window in the future. This function blocks until a stage is created and returns.
      *
      * @param fxml_url The path to the FXML that represents the scene to switch to.
      * @param show_immediately Whether to show the stage immediately or not. This allows you to set additional
      *                         properties to the stage before showing it
-     * @return the Stage representing the newly created window.
+     * @return the Stage representing the newly created window. Returns null if the stage could not be created.
      */
     public static Stage createWindowWithScene(String fxml_url, boolean show_immediately)
     {
+        /* Huge thanks to https://stackoverflow.com/a/47108173, it never occured to me that I could use a BlockingQueue as easy concurrency control */
+        class RunnableReturn implements Runnable
+        {
+            private final BlockingQueue<Boolean> queue;
+            private Stage success = null;
+
+            public Stage getStage() {
+                return success;
+            }
+
+            RunnableReturn(BlockingQueue<Boolean> queue) {
+                this.queue = queue;
+            }
+
+            @Override
+            public void run() {
+                try
+                {
+                    Stage s = new Stage();
+                    Parent root = getRootNodeFromURL(fxml_url);
+
+                    Scene scene = new Scene(root);
+                    s.setScene(scene);
+                    if (show_immediately)
+                        s.show();
+
+                    queue.put(true);
+                    success = s;
+                    logger.trace("Created new stage with scene \"{}\"", fxml_url);
+                }
+                catch (Throwable t)
+                {
+                    logger.warn("SceneSwitcher failed to create window for scene {}", fxml_url);
+                    logger.warn("Cause: {}", t.getMessage());
+                    try {
+                        queue.put(false);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);  // this is unlikely to ever possibly happen!!!! Only one object is ever inserted into the queue.
+                    }
+                }
+            }
+        };
+
+        BlockingQueue<Boolean> q = new LinkedBlockingQueue<Boolean>(1);
+        RunnableReturn work = new RunnableReturn(q);
+
+        if (Platform.isFxApplicationThread())
+            work.run();
+        else
+            Platform.runLater(work);
+
+        // do not return until JavaFX thread made our window
         try
         {
-            Parent root = getRootNodeFromURL(fxml_url);
-
-            Stage s = new Stage();
-            Scene scene = new Scene(root);
-            s.setScene(scene);
-            if (show_immediately)
-                s.show();
-
-            return s;
+            if (q.take())
+                return work.success;
+            else
+                return null;
         }
-        catch (Throwable t)
+        catch (InterruptedException e)
         {
-            logger.warn("SceneSwitcher failed to create window for scene {}", fxml_url);
-            logger.warn("Cause: {}", t.getMessage());
+            throw new IllegalStateException("The microtask responsible for createWindowWithScene() was interrupted before it was completed!");
         }
-
-        return null;
     }
 
     /**
      * Creates a new window ready to be displayed with the scene(pointed to by <code>fxml_url</code>). No other properties are set.
      * Typically, you should call this function from a controller to navigate to another part of the program.
      * Keep in mind you should store the return value of this function somewhere if you want to be able to
-     * remove/modify the window in the future.
+     * remove/modify the window in the future. This function blocks until a stage is created and returns.
      *
      * @param fxml_url The path to the FXML that represents the scene to switch to.
      * @return the Stage representing the newly created window. The stage immediately appears as the function returns.
+     * Returns null if the stage could not be created.
      */
     public static Stage createWindowWithScene(String fxml_url)
     {
@@ -118,6 +173,7 @@ final public class SceneSwitcher
                 logger.error("getResource failed! Ensure fxml_url is correct...\nfxml_url: {}", fxml_url);
             }
             logger.warn("Exception raised: {}", t.getMessage());
+            System.out.println(t.getMessage());
         }
         return null;
     }
@@ -179,16 +235,24 @@ final public class SceneSwitcher
 
     public static void raiseAlert_GenericImpl(String title, String header, String content, AlertType type)
     {
-        Alert win = new Alert(type);
-        if (title != null && !title.isEmpty())
-            win.setTitle(title);
+        Runnable work = () -> {
+            logger.trace("Generating Alert: \n title: {}, header: {}, content: {}, AlertType: {}", title, header, content, type.toString());
+            Alert win = new Alert(type);
+            if (title != null && !title.isEmpty())
+                win.setTitle(title);
 
-        if (header != null && !header.isEmpty())
-            win.setHeaderText(header);
+            if (header != null && !header.isEmpty())
+                win.setHeaderText(header);
 
-        if (content != null && !content.isEmpty())
-            win.setContentText(content);
+            if (content != null && !content.isEmpty())
+                win.setContentText(content);
 
-        win.showAndWait();
+            win.showAndWait();
+        };
+
+        if (Platform.isFxApplicationThread())
+            work.run();
+        else
+            Platform.runLater(work);
     }
 }

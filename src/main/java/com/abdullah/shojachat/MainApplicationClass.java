@@ -3,24 +3,17 @@ package com.abdullah.shojachat;
 import com.abdullah.shojachat.util.CommonInstancesClass;
 import com.abdullah.shojachat.util.SceneSwitcher;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.security.Security;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.crypto.spec.SecretKeySpec;
+import javax.net.ssl.SSLSocketFactory;
 
+import static com.abdullah.shojachat.util.Identifiers.String_CwdPath_CIC;
 
 
 public class MainApplicationClass extends Application
@@ -31,26 +24,40 @@ public class MainApplicationClass extends Application
     @Override
     public void start(Stage stage) throws IOException
     {
+        //System.out.println(Thread.currentThread().getUncaughtExceptionHandler().getClass());
+        Thread.currentThread().setUncaughtExceptionHandler(new ShojaChatUncaughtExceptionHandler());
+        /* it is not possible to set a custom UncaughtExceptionHandler while you are */
+
+        /* do all setup that requires main here */
         SceneSwitcher.global_class_handle = MainApplicationClass.class;
         SceneSwitcher.mainstage = stage;
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApplicationClass.class.getResource("mainWindow.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
-        stage.show();
 
-        //for (java.security.Provider prov: java.security.Security.getProviders())
-        //    System.out.println(prov.toString());
+        CommonInstancesClass.putObject(String_CwdPath_CIC, System.getProperty("user.dir"));
+        logger.info("Current Working Directory: {}", (String)CommonInstancesClass.getObject(String_CwdPath_CIC));
 
-        // goal: try to hash "hello" using PBKDF2WITHHMACSHA384
+        if (server_mode)   // launch server side app here
+        {
+            // this is basically a main function that should live as long as the program does...
+            // we must make a new thread and have it run this function....
+            new Thread("Server Application Main Thread"){
+                @Override
+                public void run() {
+                    ServerApplicationClass.server_main(stage);
+                }
+            }.start();
+        }
+        else
+        {
 
-        for (String alg: java.security.Security.getAlgorithms("KeyGenerator"))
-            System.out.println(alg);
+        }
 
-        System.out.println("\n\n\n");
 
-        System.out.println(Arrays.toString(new SecretKeySpec("hello".getBytes(), "PBKDF2WITHHMACSHA384").getEncoded()));
 
+//        FXMLLoader fxmlLoader = new FXMLLoader(MainApplicationClass.class.getResource("mainWindow.fxml"));
+//        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        //stage.setTitle("Hello!");
+        //stage.setScene(scene);
+        //stage.show();
     }
 
     private void cmdShowUsage()
@@ -60,8 +67,13 @@ public class MainApplicationClass extends Application
     }
 
     public static void main(String[] args)
-    {
-        logger.info("<-- Application started at");
+    {logger.info("<-- Application started at");
+
+
+        Thread.setDefaultUncaughtExceptionHandler(new ShojaChatUncaughtExceptionHandler());
+        Thread.currentThread().setUncaughtExceptionHandler(new ShojaChatUncaughtExceptionHandler());
+        //System.out.println(Thread.currentThread().getUncaughtExceptionHandler().getClass());
+
         /*
         logger.info("Example log from {}", MainApplicationClass.class.getSimpleName());
         logger.debug("Example log from {}", MainApplicationClass.class.getSimpleName());
@@ -84,8 +96,17 @@ public class MainApplicationClass extends Application
 
         logger.trace("Arguments passed: {}", String.join(" ", args));
 
+                /* RUNTIME INFORMATION*/
+                logger.info("Available SecretKeyFactory's: {}", String.join("  ", Security.getAlgorithms("SecretKeyFactory")));
+                //logger.info("Available KeyGenerator's: {}", String.join("  ", Security.getAlgorithms("KeyGenerator")));
+                logger.info("Available Ciphers for TLS: {}", String.join(" ", ((SSLSocketFactory)SSLSocketFactory.getDefault()).getSupportedCipherSuites()));
+
+        // check all running threads
+        //for (Thread t: Thread.getAllStackTraces().keySet())
+        //    System.out.println(t);
+
         logger.trace("Starting the JavaFX subsystem...");
         launch();
-        logger.trace("JavaFX subsystem terminated");
+        logger.trace("JavaFX subsystem terminated. Graceful exit.");
     }
 }

@@ -36,7 +36,6 @@ import java.util.concurrent.ConcurrentHashMap;
 */
 public class CommonInstancesClass
 {
-    private final static CommonInstancesClass INSTANCE = new CommonInstancesClass();
     private static final ConcurrentHashMap<String, Object> RuntimeObjects = new ConcurrentHashMap<>(); // to get access to some data, you need to know what string
 
     private CommonInstancesClass()

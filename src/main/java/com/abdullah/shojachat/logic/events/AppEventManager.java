@@ -1,4 +1,4 @@
-package com.abdullah.shojachat.logic;
+package com.abdullah.shojachat.logic.events;
 
 /**
  * LogicEvents:

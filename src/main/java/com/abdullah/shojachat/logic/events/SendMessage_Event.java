@@ -1,4 +1,4 @@
-package com.abdullah.shojachat.logic;
+package com.abdullah.shojachat.logic.events;
 
 /**
  * Event that is called when the client has decided that a message is ready to be sent.
