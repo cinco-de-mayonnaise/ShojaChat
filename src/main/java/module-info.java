@@ -6,6 +6,7 @@ module com.abdullah.shojachat {
     requires org.slf4j;
     requires ch.qos.logback.core;
     requires ch.qos.logback.classic;
+    requires org.apache.commons.io;
 
 
     //opens com.abdullah.shojachat to javafx.fxml;

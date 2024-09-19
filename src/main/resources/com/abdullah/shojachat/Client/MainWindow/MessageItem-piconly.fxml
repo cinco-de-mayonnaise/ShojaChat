@@ -27,7 +27,7 @@
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" " />
             <ImageView fx:id="ImageView_MessageImage" fitHeight="232.0" fitWidth="266.0" preserveRatio="true">
                <image>
-                  <Image url="@../../test_image_1.jpg" />
+                  <Image url="@../../../../../test_image_1.jpg" />
                </image>
                <viewport>
                   <Rectangle2D />

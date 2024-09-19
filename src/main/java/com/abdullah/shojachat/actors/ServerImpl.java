@@ -1,6 +1,7 @@
 package com.abdullah.shojachat.actors;
 
-import java.io.Serializable;
+import java.io.*;
+import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 import java.util.UUID;
@@ -49,7 +50,7 @@ public class ServerImpl implements ShojaChatDirectoryServer
         logger.trace("Successfully loaded server {}", this.getServerName());
     }
 
-    public ServerImpl(String hashType, int maxUsers, boolean requireEmail, boolean allowImages, boolean allowFiles, boolean enableStatistics,long size_spaceAllowed_bytes, String name, int maxUsersOnline) throws NoSuchAlgorithmException, IllegalArgumentException
+    public ServerImpl(String hashType, boolean requireEmail, boolean allowImages, boolean allowFiles, boolean enableStatistics,long size_spaceAllowed_bytes, String name, int maxUsers, int maxUsersOnline) throws NoSuchAlgorithmException, IllegalArgumentException
     {
         hasher = new Hasher(hashType);  // check if hashType is valid or itll throw an exception
 
@@ -65,7 +66,7 @@ public class ServerImpl implements ShojaChatDirectoryServer
         if (maxUsersOnline <= 1)
             throw new IllegalArgumentException("A server must allow at least 2 concurrent users to connect!");   // ensure maxUser is at least 2, or set it to default 20
 
-        if (name == null || name.length() >= 4 || name.isBlank() || name.isEmpty())
+        if (name == null || name.length() <= 4 || name.isBlank())
             throw new IllegalArgumentException("A server should have a descriptive name");
 
         serverData = new ServerImplData(
@@ -76,6 +77,7 @@ public class ServerImpl implements ShojaChatDirectoryServer
                                         allowFiles,
                                         enableStatistics,
                                         size_spaceAllowed_bytes,
+                                        name,
                                         maxUsers,
                                         maxUsersOnline
         );
@@ -92,7 +94,7 @@ public class ServerImpl implements ShojaChatDirectoryServer
     @Override
     public void setServerName(String name)
     {
-        if (name == null || name.length() >= 4 || name.isBlank() || name.isEmpty())
+        if (name == null || name.length() <= 4 || name.isBlank())
             throw new IllegalArgumentException("A server should have a descriptive name");
 
         logger.info("Server name has changed, old: \"{}\", new: \"{}\"", serverData.getName(), name);
@@ -142,5 +144,18 @@ public class ServerImpl implements ShojaChatDirectoryServer
         serverData.setMaxUsersOnline(newcapacity);
     }
 
+    public void saveServer(Path filelocation) throws IOException {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filelocation.toFile())))
+        {
+            oos.writeObject(serverData);
+        }
+    }
 
+
+    @Override
+    public String toString() {
+        return "ServerImpl{" +
+                "Name=" + this.getServerName() + ", UUID=" + serverData.getId() +
+                '}';
+    }
 }

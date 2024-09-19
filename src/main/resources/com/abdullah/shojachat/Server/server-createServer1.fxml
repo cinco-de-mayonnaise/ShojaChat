@@ -9,6 +9,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -21,7 +22,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="547.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.abdullah.shojachat.ui.controller.node_server__createServer1$controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.abdullah.shojachat.ui.controller.node_server__createServer1$controller">
    <center>
       <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="327.0" spacing="10.0" BorderPane.alignment="CENTER">
          <padding>
@@ -88,8 +89,8 @@
                               <Label text="Server Cache Size" />
                               <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <TextField fx:id="TF_ServerCacheSize" onAction="#callback_TF_SCS" onInputMethodTextChanged="#callback_TF_SCS" onKeyTyped="#callback_TF_SCS" prefHeight="25.0" prefWidth="269.0" promptText="Size in Megabytes" HBox.hgrow="ALWAYS" />
-                                    <ComboBox prefWidth="150.0" HBox.hgrow="ALWAYS" />
+                                    <TextField fx:id="TF_ServerCacheSize" prefHeight="25.0" prefWidth="269.0" promptText="Size in Megabytes" text="512" HBox.hgrow="ALWAYS" />
+                                    <ComboBox fx:id="CB_SCSDatasize" prefWidth="150.0" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
                            </children>
@@ -124,6 +125,26 @@
                      </children>
                   </HBox>
                </children>
+            </HBox>
+            <VBox prefHeight="0.0" prefWidth="520.0">
+               <children>
+                  <Label text="Server Datafile Location" />
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <TextField fx:id="TF_ServerFileLocation" prefHeight="25.0" prefWidth="426.0" HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#click_ServerDataFileLocation" prefHeight="25.0" prefWidth="129.0" text="Select Location" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="10.0" prefWidth="520.0" spacing="5.0">
+               <children>
+                  <ImageView fx:id="IV_Icon_fieldvalidation" fitHeight="25.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="Label_fieldvalidation" text="test" />
+               </children>
+               <padding>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </padding>
             </HBox>
          </children>
       </VBox>

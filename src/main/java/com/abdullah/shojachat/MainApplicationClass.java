@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import static com.abdullah.shojachat.util.Identifiers.String_CwdPath_CIC;
+import static com.abdullah.shojachat.util.Identifiers.CIC_String_CwdPath;
 
 
 public class MainApplicationClass extends Application
@@ -32,8 +32,8 @@ public class MainApplicationClass extends Application
         SceneSwitcher.global_class_handle = MainApplicationClass.class;
         SceneSwitcher.mainstage = stage;
 
-        CommonInstancesClass.putObject(String_CwdPath_CIC, System.getProperty("user.dir"));
-        logger.info("Current Working Directory: {}", (String)CommonInstancesClass.getObject(String_CwdPath_CIC));
+        CommonInstancesClass.putObject(CIC_String_CwdPath, System.getProperty("user.dir"));
+        logger.info("Current Working Directory: {}", (String)CommonInstancesClass.getObject(CIC_String_CwdPath));
 
         if (server_mode)   // launch server side app here
         {
@@ -53,7 +53,7 @@ public class MainApplicationClass extends Application
 
 
 
-//        FXMLLoader fxmlLoader = new FXMLLoader(MainApplicationClass.class.getResource("mainWindow.fxml"));
+//        FXMLLoader fxmlLoader = new FXMLLoader(MainApplicationClass.class.getResource("main.fxml"));
 //        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         //stage.setTitle("Hello!");
         //stage.setScene(scene);

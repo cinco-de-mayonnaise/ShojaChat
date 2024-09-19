@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.abdullah.shojachat.ui.controller.node_server__loadServer$controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.abdullah.shojachat.ui.controller.server__loadServer$controller">
    <center>
       <VBox prefHeight="400.0" prefWidth="345.0" style="-fx-background-color: blue;" BorderPane.alignment="CENTER" />
    </center>
@@ -34,7 +34,7 @@
                         </HBox>
                         <HBox alignment="TOP_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#click_CreateNewServer" text="Create New Server" />
+                              <Button fx:id="lovelyButton" mnemonicParsing="false" onAction="#click_CreateNewServer" text="Create New Server" />
                            </children>
                         </HBox>
                      </children>

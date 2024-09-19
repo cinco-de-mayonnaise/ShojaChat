@@ -47,8 +47,10 @@ public class ServerImplData implements Serializable
                           boolean allowFiles,
                           boolean enableStatistics,
                           long size_spaceAllowed_bytes,
+                          String name,
                           int maxUsers,
                           int maxUsersOnline) {
+
         this.id = id;
         this.hashType = hashType;
         this.requireEmail = requireEmail;
@@ -57,6 +59,7 @@ public class ServerImplData implements Serializable
         this.size_spaceAllowed_bytes = size_spaceAllowed_bytes;
         this.maxUsers = maxUsers;
         this.maxUsersOnline = maxUsersOnline;
+        this.name = name;
 
         this.stats = new ServerStatistics(enableStatistics);
     }

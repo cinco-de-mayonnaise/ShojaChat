@@ -7,15 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Objects;
 import java.util.Properties;
 
-import static com.abdullah.shojachat.util.Identifiers.Scenes.node_server__loadServer;
-import static com.abdullah.shojachat.util.Identifiers.String_CwdPath_CIC;
+import static com.abdullah.shojachat.util.Identifiers.Scenes.server__loadServer;
+import static com.abdullah.shojachat.util.Identifiers.CIC_String_CwdPath;
 import static com.abdullah.shojachat.util.SceneSwitcher.raiseAlert_GenericWarning;
 
 public class ServerApplicationClass
@@ -52,14 +49,14 @@ public class ServerApplicationClass
         if (serverfile_path.isEmpty())
         {
             // one was not opened previously.
-            SceneSwitcher.switchToScene(stage, node_server__loadServer);
+            SceneSwitcher.switchToScene(stage, server__loadServer);
         }
     }
 
     private static Properties loadServerSettings()
     {
         Properties prop = new Properties();
-        Path serverSettings_file = Path.of((String)CommonInstancesClass.getObject(String_CwdPath_CIC), "serverSettings.dat");
+        Path serverSettings_file = Path.of((String)CommonInstancesClass.getObject(CIC_String_CwdPath), "serverSettings.dat");
 
         if (!serverSettings_file.toFile().exists())
         {

@@ -8,7 +8,8 @@ public abstract class Identifiers
 
     /////// CIC Identifiers
     // Should conform to the following name: <Typename>_name_CIC
-    public static final String String_CwdPath_CIC = "takano-chan";
+    public static final String CIC_String_CwdPath = "takano-chan";
+    public static final String CIC_ServerImpl_CurrentRunningServer = "meow";
 
     /////// Java Constructor Arguments
     // Fallbacks to the Password Hashing Algorithm (currently unused, PWHasher takes their own hash
@@ -21,7 +22,9 @@ public abstract class Identifiers
     /////// Scene paths
     public abstract static class Scenes
     {
-        public static final String node_server__loadServer = "Server/node_server-loadServer.fxml";
-        public static final String node_server__createServer1 = "Server/node_server-createServer1.fxml";
+        public static final String server__loadServer = "Server/server-loadServer.fxml";
+        public static final String server__createServer1 = "Server/server-createServer1.fxml";
+        public static final String server_MainWindow__main = "Server/MainWindow/main.fxml";
+
     }
 }
